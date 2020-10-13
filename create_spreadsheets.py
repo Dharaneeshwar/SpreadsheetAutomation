@@ -5,8 +5,11 @@ import json
 
 with open('Json/counsellors details.json') as cd:
   	counsellor_data = json.load(cd)
-current_counsellor = ""
 
+with open('Json/SubjectCode.json') as sc:
+  	subjectCode = json.load(sc)
+
+current_counsellor = ""
 filename_source="Input Data/Counseler Report Template.xlsx"
 workbook = load_workbook(filename=filename_source)
 i,j = 0,0
@@ -27,6 +30,8 @@ for year in counsellor_data:
             workbook = load_workbook(filename=filename_source)
             sheet = workbook['Sheet1']
             sheet["C4"].value = current_counsellor
+            for i in range(5,5+len(subjectCode[year])):
+                sheet.cell(row = 5, column = i).value = subjectCode[year][i-5]
             i,j = 6,1
             sno = 1    
         print(student)    
@@ -44,7 +49,7 @@ for year in counsellor_data:
         for test in ['IA-I','IA-II','MODEL','AU']:
             sheet.cell(row = test_index,column = j+3).value = test
             test_index+=1 
-
+workbook.save(filename=f'Output Spreadsheets/{filename_dest}.xlsx')
 
 
     
